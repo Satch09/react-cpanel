@@ -17,7 +17,6 @@ class AddClient extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    console.log('foo');
     const {state,
     props: {firestore, history}
   } = this;
