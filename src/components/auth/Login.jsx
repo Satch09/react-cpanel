@@ -1,28 +1,33 @@
-import {compose} from 'redux';
-import {connect} from 'react-redux';
-import {firebaseConnect} from 'react-redux-firebase';
-import {firebase} from 'firebase';
-import PropTypes from 'prop-types';
+// import {compose} from 'redux';
+// import {connect} from 'react-redux';
+import { firebaseConnect } from 'react-redux-firebase';
+import { firebase } from 'firebase';
+// import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 class Login extends Component {
-  state = {
-    email: '',
-    password: ''
-  }
-  onSubmit = e => {
-    e.preventDefault();
-    const {firebase} = this.props;
-    const {email, password} = this.state;
-    console.log(email);
-    console.log(password);
-    firebase.auth().signInWithEmailAndPassword(email, password)
-    .catch((error) => alert(error))
-    // .then(this.props.history.push('/'));
-  }
-  onChange = e => {
-    this.setState({[e.target.name]: e.target.value});
-  }
+	state = {
+		email: 'c@g.com',
+		password: 'Qwerty123',
+		user: ''
+	}
+
+	componentDidMount() {
+		this.props.firebase.logout();
+	}
+
+	onSubmit = async e => {
+		e.preventDefault();
+		const { firebase } = this.props;
+		const { email, password } = this.state;
+		const loggedInUser = await firebase.auth().signInWithEmailAndPassword(email, password);
+		this.setState({ user: loggedInUser.user });
+		console.log(this.state.user.metadata.lastSignInTime);
+	}
+
+	onChange = e => {
+		this.setState({ [e.target.name]: e.target.value });
+	}
 	render() {
 		return (
 			<div>
@@ -33,7 +38,7 @@ class Login extends Component {
 								<h1 className="text-center pb-4 pt-3">
 									<span className="text-primary">
 										<i className="fas fa-lock"></i>
-                  Login
+										Login
 									</span>
 								</h1>
 								<form onSubmit={this.onSubmit}>
@@ -53,19 +58,16 @@ class Login extends Component {
 											onChange={this.onChange}
 										/>
 									</div>
-									<input type="submit" value="Login" className="btn btn-primary btn-block"/>
+									<input type="submit" value="Login" className="btn btn-primary btn-block" />
 								</form>
 							</div>
 						</div>
 					</div>
 				</div>
-
 			</div>
 		);
 	}
 }
-Login.propTypes = {
-	firebase: PropTypes.object.inRequired
-};
+
 export default firebaseConnect()(Login);
 

@@ -54,7 +54,7 @@ return null;
 								{clients.map(client => (
 									<tr key={client.id}>
 										<td> {client.firstName} {client.lastName} </td>
-										<td>{client.email}</td>
+										<td> <a href={client.email}>{client.email}</a> </td>
 										<td>R{parseFloat(client.balance).toFixed(2)}</td>
 										<td>
 											<Link className="btn btn-secondary brn-sm" to={`/client/${client.id}`}>
